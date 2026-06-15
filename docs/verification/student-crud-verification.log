@@ -1,0 +1,76 @@
+Task 2 — Student CRUD: verification run
+=======================================
+
+Verified against the running backend (port 5007) as admin (role_id=1).
+Sequence: create -> list -> get -> update -> get -> status(disable) -> get.
+Temporary [STUDENTS] request logging was added to the controller for this
+capture and removed afterwards. Every endpoint returned HTTP 200.
+
+Server output (npm start):
+
+> school-mgmt-backend@1.0.0 start
+> node ./src/server.js
+
+x-secret-header secret
+Server running on port 5007
+[STUDENTS] POST /students - body: {
+  name: 'Dora CRUD',
+  gender: 'Female',
+  dob: '2011-04-04',
+  phone: '555-0400',
+  email: 'dora.crud@example.com',
+  class: 'Grade 1',
+  section: 'A',
+  roll: '11',
+  admissionDate: '2024-09-01',
+  fatherName: 'Hank',
+  fatherPhone: '555-0401',
+  motherName: 'Ivy',
+  motherPhone: '555-0402',
+  guardianName: '',
+  guardianPhone: '',
+  relationOfGuardian: '',
+  currentAddress: '4 Elm St',
+  permanentAddress: '4 Elm St',
+  systemAccess: true
+}
+[STUDENTS] POST /students -> 200, { message: 'Student added, but failed to send verification email.' }
+[STUDENTS] GET /students - query: {}
+[STUDENTS] GET /students -> 200, 3 students
+[STUDENTS] GET /students - query: {}
+[STUDENTS] GET /students -> 200, 3 students
+[STUDENTS] GET /students/6
+[STUDENTS] GET /students/6 -> 200, id=6
+[STUDENTS] PUT /students/6 - body: {
+  userId: 6,
+  name: 'Dora UPDATED',
+  gender: 'Female',
+  dob: '2011-04-04',
+  phone: '555-9999',
+  email: 'dora.crud@example.com',
+  class: 'Grade 1',
+  section: 'A',
+  roll: '11',
+  admissionDate: '2024-09-01',
+  fatherName: 'Hank',
+  fatherPhone: '555-0401',
+  motherName: 'Ivy',
+  motherPhone: '555-0402',
+  guardianName: '',
+  guardianPhone: '',
+  relationOfGuardian: '',
+  currentAddress: '4 Elm St',
+  permanentAddress: '4 Elm St',
+  systemAccess: true
+}
+[STUDENTS] PUT /students/6 -> 200, { message: 'Student updated successfully' }
+[STUDENTS] GET /students/6
+[STUDENTS] GET /students/6 -> 200, id=6
+[STUDENTS] POST /students/6/status - status=false, reviewerId=1
+[STUDENTS] POST /students/6/status -> 200, { message: 'Student status changed successfully' }
+[STUDENTS] GET /students/6
+[STUDENTS] GET /students/6 -> 200, id=6
+
+Note: the "failed to send verification email" message on create is expected in
+local dev — RESEND_API_KEY is a placeholder. The student record is still created
+(the service handles the email failure gracefully). All five endpoints returned 200.
